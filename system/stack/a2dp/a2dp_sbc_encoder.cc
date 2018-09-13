@@ -40,6 +40,7 @@
 #include "embdrv/sbc/encoder/include/sbc_encoder.h"
 #include "internal_include/bt_target.h"
 #include "osi/include/allocator.h"
+#include "osi/include/properties.h"
 #include "stack/include/bt_hdr.h"
 
 /* Buffer pool */
@@ -59,6 +60,16 @@
 #define A2DP_SBC_3DH5_DEFAULT_BITRATE 552
 #define A2DP_SBC_3DH5_48KHZ_BITRATE 601
 
+/*
+ * SBC Dual Channel (SBC HD) 2DH5 alternative bitrates.
+ * 648 kbps @ 48 khz, 595.4 kbps @ 44.1 khz.
+ * Up to 3 frames for 2DH5.
+ */
+#define A2DP_SBC_2DH5_ALT_BITRATE 596
+#define A2DP_SBC_2DH5_ALT_48KHZ_BITRATE 649
+
+// SBC HD alternative bitrate property
+#define A2DP_SBC_HD_PROP "persist.bluetooth.sbc_hd_higher_bitrate"
 
 #define A2DP_SBC_NON_EDR_MAX_RATE 229
 
@@ -777,6 +788,15 @@ static uint16_t a2dp_sbc_source_rate(bool is_peer_edr) {
     if (a2dp_sbc_encoder_cb.sbc_encoder_params.s16SamplingFreq == SBC_sf48000) {
       rate = A2DP_SBC_3DH5_48KHZ_BITRATE;
     }
+  }
+
+  /* 2DH5 alternative bitrates */
+  if (a2dp_sbc_encoder_cb.hd &&
+      !a2dp_sbc_encoder_cb.peer_params.peer_supports_3mbps &&
+      osi_property_get_int32(A2DP_SBC_HD_PROP, 0)) {
+    rate = A2DP_SBC_2DH5_ALT_BITRATE;
+    if (a2dp_sbc_encoder_cb.sbc_encoder_params.s16SamplingFreq == SBC_sf48000)
+      rate = A2DP_SBC_2DH5_ALT_48KHZ_BITRATE;
   }
 
   /* restrict bitrate if a2dp link is non-edr */
