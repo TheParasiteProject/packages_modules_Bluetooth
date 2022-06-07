@@ -7,9 +7,12 @@
     android:sharedUserId="android.uid.system">
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BATTERY_STATS"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
@@ -20,6 +23,19 @@
         android:icon="@mipmap/bt_headphones_a2dp"
         android:label="BtHelper"
         android:persistent="true">
+
+        <!-- AirPods settings -->
+        <service
+            android:name=".bluetooth.AirPodsBatteryService"
+            android:exported="true" />
+
+        <receiver
+            android:name=".bluetooth.AirPodsBatteryInitializer"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>
