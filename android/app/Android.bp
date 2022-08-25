@@ -225,7 +225,7 @@ android_library {
 // Bluetooth APK
 android_app {
     name: "Bluetooth",
-    certificate: ":com.android.bluetooth.certificate",
+    certificate: "bluetooth",
     static_libs: ["BluetoothLib"],
     defaults: [
         "bluetooth_framework_errorprone_rules",
@@ -284,9 +284,4 @@ genrule {
         " --javaPackage com.android.bluetooth --javaClass BtRestrictedStatsLog" +
         " --minApiLevel 34",
     out: ["com/android/bluetooth/BtRestrictedStatsLog.java"],
-}
-
-android_app_certificate {
-    name: "com.android.bluetooth.certificate",
-    certificate: "certs/com.android.bluetooth",
 }
