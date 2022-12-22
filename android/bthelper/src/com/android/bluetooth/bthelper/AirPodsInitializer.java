@@ -24,7 +24,7 @@ import android.os.UserHandle;
 public class AirPodsInitializer {
 
     static void startBatteryService(Context context, BluetoothDevice device) {
-        if (AirPodsConstants.shouldBeAirPods(device) == false) {
+        if (Constants.shouldBeAirPods(device) == false) {
             return;
         }
         final Intent intent = new Intent(context, AirPodsBatteryService.class);

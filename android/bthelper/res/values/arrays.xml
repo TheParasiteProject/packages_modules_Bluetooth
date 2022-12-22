@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="scan_mode_entries" translatable="false">
+        <item>@string/scan_mode_opportunistic</item>
+        <item>@string/scan_mode_screen_off</item>
+        <item>@string/scan_mode_screen_off_balanced</item>
+        <item>@string/scan_mode_low_power</item>
+        <item>@string/scan_mode_balanced</item>
+        <item>@string/scan_mode_ambient_discovery</item>
+        <item>@string/scan_mode_low_latency</item>
+    </string-array>
+
+    <string-array name="scan_mode_values" translatable="false">
+        <item>-1</item> <!-- ScanSettings.SCAN_MODE_OPPORTUNISTIC -->
+        <item>4</item> <!-- ScanSettings.SCAN_MODE_SCREEN_OFF -->
+        <item>5</item> <!-- ScanSettings.SCAN_MODE_SCREEN_OFF_BALANCED -->
+        <item>0</item> <!-- ScanSettings.SCAN_MODE_LOW_POWER -->
+        <item>1</item> <!-- ScanSettings.SCAN_MODE_BALANCED -->
+        <item>3</item> <!-- ScanSettings.SCAN_MODE_AMBIENT_DISCOVERY -->
+        <item>2</item> <!-- ScanSettings.SCAN_MODE_LOW_LATENCY -->
+    </string-array>
+</resources>

@@ -21,11 +21,11 @@ import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.net.Uri;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.android.bluetooth.bthelper.Constants;
 import com.android.bluetooth.bthelper.AirPodsUtils;
 import com.android.bluetooth.bthelper.R;
 
@@ -35,6 +35,7 @@ public class Generic {
 
     private static final int FLAG_REVERSED = 1 << 1;
 
+    private static boolean isEnhancedSettingsUiUriSet = false;
     private static boolean isModelLowBatteryThresholdSet = false;
 
     private static int batteryLeft, batteryRight, batteryUnified;

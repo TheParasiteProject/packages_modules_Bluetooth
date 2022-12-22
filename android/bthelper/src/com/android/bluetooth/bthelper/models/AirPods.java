@@ -21,11 +21,11 @@ import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.net.Uri;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.android.bluetooth.bthelper.Constants;
 import com.android.bluetooth.bthelper.AirPodsUtils;
 import com.android.bluetooth.bthelper.R;
 
@@ -45,6 +45,7 @@ public class AirPods {
     private static final int MASK_USING_LEFT = 1 << 1;
     private static final int MASK_USING_RIGHT = 1 << 3;
 
+    private static boolean isEnhancedSettingsUiUriSet = false;
     private static boolean isModelSet = false;
     private static boolean isModelIconSet = false;
     private static boolean isModelLowBatteryThresholdSet = false;

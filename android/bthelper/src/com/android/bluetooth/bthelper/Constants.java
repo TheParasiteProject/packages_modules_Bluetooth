@@ -22,7 +22,7 @@ import android.os.ParcelUuid;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AirPodsConstants {
+public class Constants {
 
     public static final int MANUFACTURER_ID = 0x004C;
     public static final int MANUFACTURER_MAGIC = 0x07;
@@ -37,7 +37,7 @@ public class AirPodsConstants {
     public static boolean shouldBeAirPods(BluetoothDevice device) {
         try {
             for (ParcelUuid uuid : device.getUuids()) {
-                if (AirPodsConstants.UUIDS.contains(uuid)) {
+                if (Constants.UUIDS.contains(uuid)) {
                     return true;
                 }
             }
@@ -47,4 +47,8 @@ public class AirPodsConstants {
         }
     }
 
+    public static final String KEY_LOW_LATENCY_AUDIO = "low_latency_audio_pref";
+    public static final String KEY_SCAN_MODE = "scan_mode_pref";
+    public static final String KEY_SCAN_MODE_INFO = "scan_mode_info_pref";
+    
 }

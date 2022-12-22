@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+     <string name="bthelper_title" translatable="false">BtHelper</string>
+
+     <string name="bluetooth_a2dp_preferences_title">Bluetooth A2DP preferences</string>
+     <string name="bluetooth_a2dp_preferences_summary">Bluetooth low latency audio, le scan mode</string>
+
+     <string name="low_latency_audio_title">Use Low Latency Audio</string>
+     <string name="low_latency_audio_summary">Enable Low Latency connection for audio to reduce delay.\nThis will increase power consumption of bluetooth device and decrease audio quality.</string>
+
+     <string name="scan_mode_title">Bluetooth LE Scan Mode</string>
+     <string name="scan_mode_opportunistic">Opportunistic</string>
+     <string name="scan_mode_screen_off">Extreme Low Power</string>
+     <string name="scan_mode_screen_off_balanced">Balanced Low Power</string>
+     <string name="scan_mode_low_power">Low Power</string>
+     <string name="scan_mode_balanced">Balanced</string>
+     <string name="scan_mode_ambient_discovery">Ambient Discovery</string>
+     <string name="scan_mode_low_latency">Low Latency</string>
+
+     <string name="scan_mode_description"><xliff:g id="description">%s</xliff:g></string>
+     <string name="scan_mode_opportunistic_description">Opportunistic Mode:\nSpecial mode that passively listen other scan results without starting BLE scans.</string>
+     <string name="scan_mode_screen_off_description">Extreme Low Power Mode:\nLowest power consumption among all mode using low duty cycle and long scan interval.</string>
+     <string name="scan_mode_screen_off_balanced_description">Balanced Low Power Mode:\nLess aggresive Extreme Low Power Mode.</string>
+     <string name="scan_mode_low_power_description">Low Power Mode:\nConsumes the least power to saving battery.</string>
+     <string name="scan_mode_balanced_description">Balanced Mode:\nProvides a good trade-off between scan frequency and power consumption.</string>
+     <string name="scan_mode_ambient_discovery_description">Ambient Discovery Mode:\nUsing lower duty cycle and more aggressive scan interval than balanced mode.</string>
+     <string name="scan_mode_low_latency_description">Low Latency Mode:\nUsing highest duty cycle to get best result.</string>
+</resources>

@@ -31,11 +31,14 @@ import android.bluetooth.le.ScanSettings;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.Manifest;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -51,6 +54,8 @@ public class AirPodsBatteryService extends Service {
 
     private static final long REPORT_DELAY_MS = 500;
 
+    private SharedPreferences mSharedPrefs;
+
     private BluetoothAdapter mAdapter;
     private BluetoothLeScanner mScanner;
 
@@ -62,6 +67,11 @@ public class AirPodsBatteryService extends Service {
 
     private boolean isChanged = false;
     
+    private int scanMode = 0;
+    private boolean isLowLatencyAudioEnabled = false;
+    private boolean isLowLatencyAudioEnabledOld = false;
+    private boolean isLowLatencyAudioEnabledFailed = false;
+
     private final ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onBatchScanResults(List<ScanResult> scanResults) {
@@ -86,6 +96,7 @@ public class AirPodsBatteryService extends Service {
         super.onCreate();
         Log.v(TAG, "onCreate");
         mContext = getApplicationContext();
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     @Override
@@ -109,6 +120,20 @@ public class AirPodsBatteryService extends Service {
     }
 
     private void startScan() {
+        scanMode = Integer.parseInt(mSharedPrefs.getString(Constants.KEY_SCAN_MODE, "0"));
+        isLowLatencyAudioEnabled = mSharedPrefs.getBoolean(Constants.KEY_LOW_LATENCY_AUDIO, false);
+        if (isLowLatencyAudioEnabledFailed == false) {
+            if (isLowLatencyAudioEnabled != isLowLatencyAudioEnabledOld) {
+                if (mCurrentDevice.setLowLatencyAudioAllowed(isLowLatencyAudioEnabled) == true) {
+                    Log.d(TAG, "Setting Low Latency Audio option to "+isLowLatencyAudioEnabled+" suceeds");
+                    isLowLatencyAudioEnabledOld = isLowLatencyAudioEnabled;
+                } else {
+                    Log.e(TAG, "Setting Low Latency Audio option to "+isLowLatencyAudioEnabled+" failed");
+                    isLowLatencyAudioEnabledFailed = true;
+                }
+            }
+        }
+
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mAdapter == null) {
             Log.w(TAG, "BluetoothAdapter is null, ignored");
@@ -124,7 +149,7 @@ public class AirPodsBatteryService extends Service {
         final List<ScanFilter> filters = new ArrayList<>();
 
         final byte[] data = new byte[2 + DATA_LENGTH_BATTERY];
-        data[0] = AirPodsConstants.MANUFACTURER_MAGIC;
+        data[0] = Constants.MANUFACTURER_MAGIC;
         data[1] = DATA_LENGTH_BATTERY;
 
         final byte[] mask = new byte[2 + DATA_LENGTH_BATTERY];
@@ -132,11 +157,11 @@ public class AirPodsBatteryService extends Service {
         mask[1] = -1;
 
         filters.add(new ScanFilter.Builder()
-                .setManufacturerData(AirPodsConstants.MANUFACTURER_ID, data, mask)
+                .setManufacturerData(Constants.MANUFACTURER_ID, data, mask)
                 .build());
 
         final ScanSettings settings = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setScanMode(scanMode)
                 .setReportDelay(REPORT_DELAY_MS)
                 .build();
 
@@ -165,7 +190,7 @@ public class AirPodsBatteryService extends Service {
             return;
         }
 
-        final byte[] data = record.getManufacturerSpecificData(AirPodsConstants.MANUFACTURER_ID);
+        final byte[] data = record.getManufacturerSpecificData(Constants.MANUFACTURER_ID);
         if (data == null || Arrays.asList(data).contains(null) || data.length != (2 + DATA_LENGTH_BATTERY)) {
             return;
         }

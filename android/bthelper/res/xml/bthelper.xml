@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:title="@string/bluetooth_a2dp_preferences_title">
+
+     <SwitchPreference
+          android:key="low_latency_audio_pref"
+          android:defaultValue="false"
+          android:title="@string/low_latency_audio_title"
+          android:summary="@string/low_latency_audio_summary" />
+
+     <ListPreference
+          android:key="scan_mode_pref"
+          android:entries="@array/scan_mode_entries"
+          android:entryValues="@array/scan_mode_values"
+          android:defaultValue="@integer/scan_mode_default"
+          android:title="@string/scan_mode_title" 
+          android:summary="%s" />
+
+     <com.android.settingslib.widget.FooterPreference
+          android:key="scan_mode_info_pref"
+          android:title="%s"
+          android:selectable="false" />
+</PreferenceScreen>
