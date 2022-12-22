@@ -42,19 +42,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.android.settings.action.IA_SETTINGS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data
-                android:name="com.android.settings.category"
-                android:value="com.android.settings.category.ia.connect" />
-            <meta-data
-                android:name="com.android.settings.summary"
-                android:resource="@string/bluetooth_a2dp_preferences_summary" />
-	        <meta-data
-	            android:name="com.android.settings.order"
-	            android:value="12" />
             <meta-data
                 android:name="com.android.settings.profile"
                 android:value="primary_profile_only" />
