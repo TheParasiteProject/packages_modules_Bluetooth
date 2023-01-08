@@ -35,7 +35,25 @@ public class AirPodsBatteryInitializer extends BroadcastReceiver {
             if (action == null) {
                 return;
             }
-            if (BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equals(action)) {
+            if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
+                final int prevState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, -1);
+                final int currentState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1);
+                final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (device == null) {
+                    return;
+                }
+                if (Constants.shouldBeAirPods(device) == false) {
+                    return;
+                }
+                if (prevState == BluetoothDevice.BOND_NONE
+                    && (prevState == BluetoothDevice.BOND_BONDED || prevState == BluetoothDevice.BOND_BONDING)) {
+                    device.setMetadata(BluetoothDevice.METADATA_IS_UNTETHERED_HEADSET,
+                                        "false".getBytes());
+                    device.setMetadata(BluetoothDevice.METADATA_DEVICE_TYPE,
+                                        BluetoothDevice.DEVICE_TYPE_DEFAULT.getBytes());
+                }
+                return;
+            } else if (BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equals(action)) {
                 final int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -1);
                 final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device == null) {
