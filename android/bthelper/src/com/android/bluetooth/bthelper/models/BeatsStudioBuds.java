@@ -65,6 +65,8 @@ public class BeatsStudioBuds {
     private static boolean chargingLeftOld, chargingRightOld, chargingCaseOld, chargingMainOld;
     private static boolean usingLeft, usingRight;
     private static boolean usingLeftOld, usingRightOld;
+    private static boolean lidOpen;
+    private static boolean lidOpenOld;
 
     private static final byte[] TRUE = "true".getBytes();
     private static final byte[] FALSE = "false".getBytes();
@@ -160,6 +162,7 @@ public class BeatsStudioBuds {
         final int flags = data[5];
         final int battery = data[6];
         final int charging = data[7];
+        lidOpen = ((data[8] >> 6) & 0xf) != 0;
         color = (int) data[9];
         Log.d(TAG, "Color code: "+color);
 
@@ -200,9 +203,11 @@ public class BeatsStudioBuds {
             || (chargingCase != chargingCaseOld)
             || (chargingMain != chargingMainOld)
             || (usingLeft != usingLeftOld)
-            || (usingRight != usingRightOld)) {
+            || (usingRight != usingRightOld)
+            || (lidOpen != lidOpenOld)) {
             isChanged = true;
         }
+        lidOpenOld = lidOpen;
         return isChanged;
     }
 

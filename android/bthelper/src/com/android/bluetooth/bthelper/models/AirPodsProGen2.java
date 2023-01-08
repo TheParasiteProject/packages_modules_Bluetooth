@@ -63,6 +63,8 @@ public class AirPodsProGen2 {
     private static boolean chargingLeftOld, chargingRightOld, chargingCaseOld, chargingMainOld;
     private static boolean usingLeft, usingRight;
     private static boolean usingLeftOld, usingRightOld;
+    private static boolean lidOpen;
+    private static boolean lidOpenOld;
 
     private static final byte[] TRUE = "true".getBytes();
     private static final byte[] FALSE = "false".getBytes();
@@ -76,6 +78,7 @@ public class AirPodsProGen2 {
         final int flags = data[5];
         final int battery = data[6];
         final int charging = data[7];
+        lidOpen = ((data[8] >> 6) & 0xf) != 0;
 
         rightLeft = (((flags >> 4) & FLAG_REVERSED) == 0);
 
@@ -114,9 +117,11 @@ public class AirPodsProGen2 {
             || (chargingCase != chargingCaseOld)
             || (chargingMain != chargingMainOld)
             || (usingLeft != usingLeftOld)
-            || (usingRight != usingRightOld)) {
+            || (usingRight != usingRightOld)
+            || (lidOpen != lidOpenOld)) {
             isChanged = true;
         }
+        lidOpenOld = lidOpen;
         return isChanged;
     }
 
