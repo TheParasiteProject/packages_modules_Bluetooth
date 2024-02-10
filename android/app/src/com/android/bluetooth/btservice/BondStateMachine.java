@@ -17,6 +17,7 @@
 package com.android.bluetooth.btservice;
 
 import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.BLUETOOTH_PRIVILEGED;
 import static android.bluetooth.BluetoothProfile.CONNECTION_POLICY_UNKNOWN;
 import static android.bluetooth.BluetoothProfile.HAP_CLIENT;
 import static android.bluetooth.BluetoothProfile.VOLUME_CONTROL;
@@ -26,6 +27,7 @@ import static com.android.bluetooth.BluetoothStatsLog.BLUETOOTH_CROSS_LAYER_EVEN
 
 import static java.util.Objects.requireNonNull;
 
+import android.annotation.RequiresPermission;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
@@ -40,6 +42,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.UserHandle;
 import android.util.Log;
+import android.util.Pair;
 
 import com.android.bluetooth.BluetoothStatsLog;
 import com.android.bluetooth.Utils;
@@ -53,6 +56,7 @@ import com.android.internal.util.StateMachine;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -483,8 +487,39 @@ final class BondStateMachine extends StateMachine {
         return false;
     }
 
+    // Defining these properly would break current api
+    private static final int PERIPHERAL_GAMEPAD = BluetoothClass.Device.Major.PERIPHERAL | 0x08;
+    private static final int PERIPHERAL_REMOTE = BluetoothClass.Device.Major.PERIPHERAL | 0x0C;
+
+    private static final List<Pair<String, Integer>> accConfirmSkip = new ArrayList<>();
+
+    static {
+        // Jarvis, SHIELD Remote 2015
+        accConfirmSkip.add(new Pair<>("SHIELD Remote", PERIPHERAL_REMOTE));
+        // Thunderstrike, SHIELD Controller 2017
+        accConfirmSkip.add(new Pair<>("NVIDIA Controller v01.04", PERIPHERAL_GAMEPAD));
+    };
+
+    @RequiresPermission(BLUETOOTH_CONNECT)
+    private static boolean isSkipConfirmationAccessory(BluetoothDevice device) {
+        for (Pair<String, Integer> entry : accConfirmSkip) {
+            if (device.getName().equals(entry.first)
+                    && device.getBluetoothClass().getDeviceClass() == entry.second) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @RequiresPermission(allOf = {BLUETOOTH_CONNECT, BLUETOOTH_PRIVILEGED})
     private void sendDisplayPinIntent(
             BluetoothDevice device, Optional<Integer> maybePin, int variant) {
+        if (device != null && device.isBondingInitiatedLocally()
+                && isSkipConfirmationAccessory(device)) {
+            device.setPairingConfirmation(true);
+            return;
+        }
         Intent intent = new Intent(BluetoothDevice.ACTION_PAIRING_REQUEST);
         intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
         maybePin.ifPresent(pin -> intent.putExtra(BluetoothDevice.EXTRA_PAIRING_KEY, pin));
