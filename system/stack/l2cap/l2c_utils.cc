@@ -1014,6 +1014,8 @@ void l2cu_send_peer_info_req(tL2C_LCB* p_lcb, uint16_t info_type) {
   BT_HDR* p_buf;
   uint8_t* p;
 
+  tL2C_LCB* p_lcb_bak = p_lcb;
+
   /* Create an identifier for this packet */
   p_lcb->signal_id++;
   l2cu_adj_id(p_lcb);
@@ -1035,7 +1037,11 @@ void l2cu_send_peer_info_req(tL2C_LCB* p_lcb, uint16_t info_type) {
   alarm_set_on_mloop(p_lcb->info_resp_timer, L2CAP_WAIT_INFO_RSP_TIMEOUT_MS,
                      l2c_info_resp_timer_timeout, p_lcb);
 
-  l2c_link_check_send_pkts(p_lcb, 0, p_buf);
+  if (!l2c_link_check_send_pkts_internal(p_lcb, 0, p_buf)) {
+    // Restore p_lcb on fail
+    p_lcb = p_lcb_bak;
+    return;
+  }
 }
 
 /*******************************************************************************
