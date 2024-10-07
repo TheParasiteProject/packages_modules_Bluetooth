@@ -781,6 +781,7 @@ void l2cu_adjust_out_mps(tL2C_CCB* p_ccb);
 void l2c_link_timeout(tL2C_LCB* p_lcb);
 void l2c_info_resp_timer_timeout(void* data);
 void l2c_link_check_send_pkts(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf);
+bool l2c_link_check_send_pkts_internal(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf);
 void l2c_link_adjust_allocation(void);
 
 void l2c_link_sec_comp(RawAddress p_bda, tBT_TRANSPORT transport, void* p_ref_data,

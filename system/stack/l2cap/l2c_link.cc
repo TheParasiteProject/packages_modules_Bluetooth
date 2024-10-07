@@ -114,7 +114,7 @@ void l2c_link_hci_conn_comp(tHCI_STATUS status, uint16_t handle, const RawAddres
 
     /* Get the peer information if the l2cap flow-control/rtrans is supported */
 
-    // l2cu_send_peer_info_req(p_lcb, L2CAP_EXTENDED_FEATURES_INFO_TYPE);
+    l2cu_send_peer_info_req(p_lcb, L2CAP_EXTENDED_FEATURES_INFO_TYPE);
 
     if (p_lcb->IsBonding()) {
       log::debug("Link is dedicated bonding handle:0x{:04x}", p_lcb->Handle());
@@ -845,6 +845,10 @@ static bool l2c_link_check_power_mode(tL2C_LCB* p_lcb) {
  *
  ******************************************************************************/
 void l2c_link_check_send_pkts(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf) {
+  l2c_link_check_send_pkts_internal(p_lcb, local_cid, p_buf);
+}
+
+bool l2c_link_check_send_pkts_internal(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf) {
   bool single_write = false;
 
   /* Save the channel ID for faster counting */
@@ -876,7 +880,7 @@ void l2c_link_check_send_pkts(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf
    */
   if (l2cb.is_cong_cback_context) {
     log::warn("skipping, is_cong_cback_context=true");
-    return;
+    return false;
   }
 
   /* If we are in a scenario where there are not enough buffers for each link to
@@ -954,7 +958,7 @@ void l2c_link_check_send_pkts(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf
     if ((p_lcb->link_state != LST_CONNECTED) || (l2c_link_check_power_mode(p_lcb))) {
       log::warn("Can't send, link state: {} not LST_CONNECTED or power mode BTM_PM_STS_PENDING",
                 p_lcb->link_state);
-      return;
+      return false;
     }
     log::verbose(
             "Direct send, transport={}, xmit_window={}, le_xmit_window={}, "
@@ -1002,6 +1006,7 @@ void l2c_link_check_send_pkts(tL2C_LCB* p_lcb, uint16_t local_cid, BT_HDR* p_buf
                          l2c_lcb_timer_timeout, p_lcb);
     }
   }
+  return true;
 }
 
 void l2c_OnHciModeChangeSendPendingPackets(RawAddress remote) {
