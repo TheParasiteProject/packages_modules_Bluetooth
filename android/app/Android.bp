@@ -168,6 +168,11 @@ cc_library_shared {
         "//apex_available:platform",
         "com.android.btservices",
     ],
+    cflags: [
+        "-Wno-unused-function",
+        "-Wno-unused-parameter",
+        "-Wno-unused-variable",
+    ],
     min_sdk_version: "Tiramisu",
 
     // TODO(b/346919576) Workaround LTO build breakage.

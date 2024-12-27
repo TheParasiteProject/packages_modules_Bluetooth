@@ -851,22 +851,6 @@ int register_com_android_bluetooth_vc(JNIEnv* env) {
            reinterpret_cast<void*>(getExtAudioOutDescriptionNative)},
           {"setExtAudioOutDescriptionNative", "([BILjava/lang/String;)Z",
            reinterpret_cast<void*>(setExtAudioOutDescriptionNative)},
-          {"getExtAudioInStateNative", "([BI)Z", reinterpret_cast<void*>(getExtAudioInStateNative)},
-          {"getExtAudioInStatusNative", "([BI)Z",
-           reinterpret_cast<void*>(getExtAudioInStatusNative)},
-          {"getExtAudioInTypeNative", "([BI)Z", reinterpret_cast<void*>(getExtAudioInTypeNative)},
-          {"getExtAudioInGainPropsNative", "([BI)Z",
-           reinterpret_cast<void*>(getExtAudioInGainPropsNative)},
-          {"getExtAudioInDescriptionNative", "([BI)Z",
-           reinterpret_cast<void*>(getExtAudioInDescriptionNative)},
-          {"setExtAudioInDescriptionNative", "([BILjava/lang/String;)Z",
-           reinterpret_cast<void*>(setExtAudioInDescriptionNative)},
-          {"setExtAudioInGainValueNative", "([BII)Z",
-           reinterpret_cast<void*>(setExtAudioInGainValueNative)},
-          {"setExtAudioInGainModeNative", "([BIZ)Z",
-           reinterpret_cast<void*>(setExtAudioInGainModeNative)},
-          {"setExtAudioInGainMuteNative", "([BIZ)Z",
-           reinterpret_cast<void*>(setExtAudioInGainMuteNative)},
   };
   const int result = REGISTER_NATIVE_METHODS(
           env, "com/android/bluetooth/vc/VolumeControlNativeInterface", methods);
@@ -878,17 +862,11 @@ int register_com_android_bluetooth_vc(JNIEnv* env) {
           {"onConnectionStateChanged", "(I[B)V", &method_onConnectionStateChanged},
           {"onVolumeStateChanged", "(IZI[BZ)V", &method_onVolumeStateChanged},
           {"onGroupVolumeStateChanged", "(IZIZ)V", &method_onGroupVolumeStateChanged},
-          {"onDeviceAvailable", "(II[B)V", &method_onDeviceAvailable},
+          {"onDeviceAvailable", "(I[B)V", &method_onDeviceAvailable},
           {"onExtAudioOutVolumeOffsetChanged", "(II[B)V", &method_onExtAudioOutVolumeOffsetChanged},
           {"onExtAudioOutLocationChanged", "(II[B)V", &method_onExtAudioOutLocationChanged},
           {"onExtAudioOutDescriptionChanged", "(ILjava/lang/String;[B)V",
            &method_onExtAudioOutDescriptionChanged},
-          {"onExtAudioInStateChanged", "(IIIZ[B)V", &method_onExtAudioInStateChanged},
-          {"onExtAudioInStatusChanged", "(II[B)V", &method_onExtAudioInStatusChanged},
-          {"onExtAudioInTypeChanged", "(II[B)V", &method_onExtAudioInTypeChanged},
-          {"onExtAudioInGainPropsChanged", "(IIII[B)V", &method_onExtAudioInGainPropsChanged},
-          {"onExtAudioInDescriptionChanged", "(ILjava/lang/String;[B)V",
-           &method_onExtAudioInDescriptionChanged},
   };
   GET_JAVA_METHODS(env, "com/android/bluetooth/vc/VolumeControlNativeInterface", javaMethods);
 

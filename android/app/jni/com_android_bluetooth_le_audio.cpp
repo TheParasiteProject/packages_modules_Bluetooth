@@ -1463,7 +1463,6 @@ static int register_com_android_bluetooth_le_audio_broadcaster(JNIEnv* env) {
           {"onBroadcastStateChanged", "(II)V", &method_onBroadcastStateChanged},
           {"onBroadcastMetadataChanged", "(ILandroid/bluetooth/BluetoothLeBroadcastMetadata;)V",
            &method_onBroadcastMetadataChanged},
-          {"onBroadcastAudioSessionCreated", "(Z)V", &method_onBroadcastAudioSessionCreated},
   };
   GET_JAVA_METHODS(env, "com/android/bluetooth/le_audio/LeAudioBroadcasterNativeInterface",
                    javaMethods);
